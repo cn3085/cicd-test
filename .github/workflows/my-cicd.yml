@@ -28,9 +28,31 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - name: Create env file
+      working-directory: ./server
+      run: |
+        touch .env
+        cat << EOF >> .env
+        ${{ secrets.ENV }}
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+    - name: Zip builded source file
+      run: zip -r cicd-test.zip .
+    - name: AWS configure credentials
+      uses: aws-actions/configure-aws-credential@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./cicd-test.zip s3://eltov-cicd-bucket/public/
+    - name: Deploy with AWS CodeDeploy
+      run: aws deploy create-deployment
+        --application-name eltov_code_deploy
+        --deployment-config-name CodeDeployDefault.OneAtATime
+        --deployment-group-name test-deploy
+        --s3-location bucket=eltov-cicd-bucket,bundleType=zip,key=public/cicd-test.zip
