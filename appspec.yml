@@ -11,6 +11,6 @@ permisstions:
     group: ubuntu
 hooks:
   ApplicationStart:
-    - location: deploy.sh
+    - location: /home/ubuntu/cicd/test/deploy.sh
       timeout: 60
       runas: ubuntu
