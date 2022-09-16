@@ -29,7 +29,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Create env file
-      working-directory: ./server
       run: |
         touch .env
         cat << EOF >> .env
