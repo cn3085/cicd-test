@@ -13,7 +13,7 @@ public class HomeController {
 	@GetMapping("/")
 	public ResponseEntity<?> home(){
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", "hello! im cicd!! why?");
+		response.put("data", "hello cicd?");
 		
 		return ResponseEntity.ok(response);
 	}
