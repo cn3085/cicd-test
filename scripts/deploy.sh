@@ -1,6 +1,6 @@
 sudo echo "-----start-----" > /home/ubuntu/cicd/deploy.log
 sudo ls . >> /home/ubuntu/cicd/deploy.log
-sudo docker build / -t cicd_test
+sudo docker build ../. -t cicd_test
 sudo echo "-----after build" >> /home/ubuntu/cicd/deploy.log
 sudo ls ../ >> /home/ubuntu/cicd/deploy.log
 sudo docker ps -q --filter "name=cicd_test" | grep -q . && docker container kill cicd_test
